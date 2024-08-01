@@ -3,17 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blank Page</title>
+    <title>Random Number Roller</title>
     <style>
-        /* Add any custom styles here */
         body {
             font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .number-display {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
         }
     </style>
+    <script>
+        function rollRandomNumber() {
+            const min = 1; // Minimum number
+            const max = 100; // Maximum number
+            const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            document.getElementById('randomNumber').innerText = randomNumber;
+        }
+    </script>
 </head>
 <body>
-    <!-- Add your content here -->
+    <div class="container">
+        <div class="number-display" id="randomNumber">Click the button to roll a number</div>
+        <button onclick="rollRandomNumber()">Roll Number</button>
+    </div>
 </body>
 </html>
