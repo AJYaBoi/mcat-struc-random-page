@@ -12,25 +12,58 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-color: #f0f0f0;
         }
         .container {
             text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .number-display {
-            font-size: 2em;
+            font-size: 3em;
             margin: 20px 0;
+            color: #333;
         }
         button {
             padding: 10px 20px;
             font-size: 1em;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
     <script>
         function rollRandomNumber() {
             const min = 1; // Minimum number
             const max = 100; // Maximum number
-            const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-            document.getElementById('randomNumber').innerText = randomNumber;
+            const interval = 50; // Time between updates in ms
+            const duration = 2000; // Total duration of rolling animation in ms
+
+            const display = document.getElementById('randomNumber');
+            let startTime = null;
+
+            function updateNumber(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+
+                if (elapsed < duration) {
+                    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                    display.innerText = randomNumber;
+                    requestAnimationFrame(updateNumber);
+                } else {
+                    const finalNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                    display.innerText = finalNumber;
+                }
+            }
+
+            requestAnimationFrame(updateNumber);
         }
     </script>
 </head>
