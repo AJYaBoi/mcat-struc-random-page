@@ -25,6 +25,24 @@
             font-size: 3em;
             margin: 20px 0;
             color: #333;
+            transition: transform 0.5s ease-in-out;
+        }
+        .number-display.bigger {
+            transform: scale(2);
+            color: #ff0000;
+        }
+        .message-display {
+            font-size: 1.2em;
+            color: orange;
+            visibility: hidden;
+        }
+        .message-display.show {
+            visibility: visible;
+            animation: flash 1s 5;
+        }
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
         button {
             padding: 10px 20px;
@@ -34,15 +52,45 @@
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            margin: 10px;
         }
         button:hover {
             background-color: #0056b3;
         }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1em;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
+        let min = 1; // Default minimum number
+        let max = 100; // Default maximum number
+
+        function setRange() {
+            const minInput = document.getElementById('minRange').value;
+            const maxInput = document.getElementById('maxRange').value;
+
+            min = parseInt(minInput, 10);
+            max = parseInt(maxInput, 10);
+
+            if (isNaN(min) || isNaN(max) || min >= max) {
+                alert("Please enter valid numbers with min less than max.");
+                return;
+            }
+
+            const messageDisplay = document.getElementById('message');
+            messageDisplay.innerText = "Number Range has been set!";
+            messageDisplay.classList.add('show');
+            setTimeout(() => {
+                messageDisplay.classList.remove('show');
+            }, 5000);
+        }
+
         function rollRandomNumber() {
-            const min = 1; // Minimum number
-            const max = 100; // Maximum number
             const interval = 50; // Time between updates in ms
             const duration = 2000; // Total duration of rolling animation in ms
 
@@ -60,9 +108,20 @@
                 } else {
                     const finalNumber = Math.floor(Math.random() * (max - min + 1)) + min;
                     display.innerText = finalNumber;
+                    display.classList.add('bigger');
+                    triggerConfetti();
                 }
             }
 
+            function triggerConfetti() {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            display.classList.remove('bigger');
             requestAnimationFrame(updateNumber);
         }
     </script>
@@ -70,7 +129,11 @@
 <body>
     <div class="container">
         <div class="number-display" id="randomNumber">Click the button to roll a number</div>
+        <input type="number" id="minRange" placeholder="Min" value="1">
+        <input type="number" id="maxRange" placeholder="Max" value="100">
+        <button onclick="setRange()">Set Range</button>
         <button onclick="rollRandomNumber()">Roll Number</button>
+        <div class="message-display" id="message"></div>
     </div>
 </body>
 </html>
